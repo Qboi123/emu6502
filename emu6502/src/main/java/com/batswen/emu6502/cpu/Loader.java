@@ -6,12 +6,28 @@ public class Loader {
         this.cpu = cpu;
     }
     public void load(String program) {
-        int addr, b;
-        addr = Integer.parseInt(program.substring(0, 4), 16);
-        program = program.substring(4);
+        int address = Integer.parseInt(program.substring(0, 4), 16);
+        program = program.substring(5);
         for (int i = 0; i < program.length(); i += 2) {
             //System.out.println("Poking "+String.format("%04X",addr)+": "+String.format("%02X",Integer.parseInt(program.substring(i, i + 2), 16)));
-            cpu.pokeByte(addr++, Integer.parseInt(program.substring(i, i + 2), 16));
+            cpu.pokeByte(address++, Integer.parseUnsignedInt(program.substring(i, i + 2), 16));
+        }
+    }
+
+    @Deprecated
+    public void write(int address, String program) {
+        int b;
+        program = program.substring(5);
+        for (int i = 0; i < program.length(); i += 2) {
+            //System.out.println("Poking "+String.format("%04X",address)+": "+String.format("%02X",Integer.parseInt(program.substring(i, i + 2), 16)));
+            cpu.pokeByte(address++, Integer.parseUnsignedInt(program.substring(i, i + 2), 16));
+        }
+    }
+
+    public void write(int address, byte[] bytecode) {
+        for (byte b : bytecode) {
+            //System.out.println("Poking "+String.format("%04X",address)+": "+String.format("%02X",Integer.parseInt(program.substring(i, i + 2), 16)));
+            cpu.pokeByte(address++, b);
         }
     }
 }
